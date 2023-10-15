@@ -12,8 +12,6 @@
 //
 // Execute `rustlings hint cow1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
 use std::borrow::Cow;
 
 fn abs_all<'a, 'b>(input: &'a mut Cow<'b, [i32]>) -> &'a mut Cow<'b, [i32]> {
@@ -49,8 +47,23 @@ mod tests {
         let mut input = Cow::from(&slice[..]);
         match abs_all(&mut input) {
             // TODO
+            Cow::Borrowed(_) => Ok(()), // Check for Cow::Borrowed(_)
+            _ => Err("Expected borrowed value"),
         }
     }
+
+    // #[test]
+    // fn owned_no_mutation() -> Result<(), &'static str> {
+    //     // We can also pass `slice` without `&` so Cow owns it directly. In this
+    //     // case no mutation occurs and thus also no clone, but the result is
+    //     // still owned because it was never borrowed or mutated.
+    //     let slice = vec![0, 1, 2];
+    //     let mut input = Cow::from(slice);
+    //     match abs_all(&mut input) {
+    //         // TODO
+
+    //     }
+    // }
 
     #[test]
     fn owned_no_mutation() -> Result<(), &'static str> {
@@ -60,7 +73,8 @@ mod tests {
         let slice = vec![0, 1, 2];
         let mut input = Cow::from(slice);
         match abs_all(&mut input) {
-            // TODO
+            Cow::Borrowed(_) | Cow::Owned(_) => Ok(()), // Check for Cow::Borrowed(_) or Cow::Owned(_)
+            _ => Err("Expected borrowed or owned value"),
         }
     }
 
@@ -73,6 +87,8 @@ mod tests {
         let mut input = Cow::from(slice);
         match abs_all(&mut input) {
             // TODO
+            Cow::Owned(_) => Ok(()), // TODO: Check for Cow::Owned(_)
+            _ => Err("Expected owned value"),
         }
     }
 }
